@@ -21,8 +21,8 @@ var GameStore = Reflux.createStore({
 		}
 		// timer
 		if (!this.phrase || timeup) {
-			const min = 30000;
-			const max = 45000;
+			const min = 3000;
+			const max = 4500;
 			const timeout = Math.ceil((Math.random() * (max - min)) + min);
 
 			this.timeoutID = window.setTimeout(() => {
@@ -54,6 +54,7 @@ var GameStore = Reflux.createStore({
 	},
 
 	clearBuzzer: function() {
+		this.phrase = null;
 		window.clearTimeout(this.timeoutID);
 	},
 
