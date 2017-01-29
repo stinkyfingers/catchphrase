@@ -117,6 +117,7 @@ export default class Game extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eee',
+    paddingTop: 25,
   },
   game: {
     flex: 2,

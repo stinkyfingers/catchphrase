@@ -1,8 +1,13 @@
 import Reflux from 'reflux';
 import GameActions from '../actions/game';
 import Phrases from '../library/phrases';
+import Store from 'react-native-store';
 
 const API = "https://catchphraseapi.herokuapp.com";
+
+const DB = {
+	'categories': Store.model('categories'),
+}
 
 var GameStore = Reflux.createStore({
 	listenables: [GameActions],
@@ -63,18 +68,45 @@ var GameStore = Reflux.createStore({
 			method: 'GET'
 		}).then((resp) => {
 			if (resp.status !== 200) {
+				DB.categories.find().then((data) => {
+					this.divvyCategories(data[0].categories);
+					return;
+				}).catch((err) => {
+					this.trigger({ error: "error getting all categories"});
+					return;
+				})
 				this.trigger({ error: "error getting all categories"});
 				return;
 			}
 			return resp.json();
 		}).then((resp) => {
-			this.categories = resp;
-			let categories = [];
-			for (const i in this.categories) {
-				categories.push(this.categories[i].name);
-			}
-			this.clearBuzzer();
-			this.trigger({ categories: categories, timeup: false });
+			this.divvyCategories(resp);
+		}).catch((err) => {
+			console.log(err);
+			this.trigger({ error: "error getting all categories"});
+			return;
+		});
+	},
+
+	divvyCategories: function(cats) {
+		if (!cats) {
+			return;
+		}
+		this.categories = cats;
+		let categories = [];
+		for (const i in this.categories) {
+			categories.push(this.categories[i].name);
+		}
+		this.clearBuzzer();
+		this.trigger({ categories: categories, timeup: false });
+		DB.categories.destroy().then(() => {
+			DB.categories.add({categories: this.categories}).catch((err) => {
+				this.trigger({ error: "error saving all categories"});
+				return;
+			})
+		}).catch((err) => {
+			this.trigger({ error: "error getting all categories"});
+			return;
 		});
 	}
 });
