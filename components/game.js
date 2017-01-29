@@ -5,7 +5,8 @@ import {
   Text,
   View,
   Button,
-  Dimensions
+  Dimensions,
+  Image
 } from 'react-native';
 import GameStore from '../stores/game';
 import GameActions from '../actions/game';
@@ -94,6 +95,12 @@ export default class Game extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Image style={styles.logo}
+            source={require('../assets/logo.png')}
+            resizeMode={'contain'}
+          />
+        </View>
         <View>
         {this.state && this.state.category ? this.renderCategory() : <Categories />}
         </View>
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   categoryHeader: {
-    backgroundColor: '#111',
+    backgroundColor: '#555',
     width: width,
     padding: 5,
     color: '#eee',
@@ -155,6 +162,13 @@ const styles = StyleSheet.create({
     color: '#eee',
     width: width,
     padding: 20,
+  },
+  logo :{
+    height: 100,
+    width: width,
+  },
+  logoContainer: {
+    backgroundColor: '#000',
   }
 });
 

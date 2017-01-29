@@ -23,7 +23,6 @@ export default class Categories extends Component {
     if (status.categories) {
       this.setState({ categories: status.categories });
     }
-    // console.log(status)
   }
 
   componentDidMount() {
